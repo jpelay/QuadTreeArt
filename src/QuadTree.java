@@ -3,6 +3,9 @@ import edu.princeton.cs.algs4.Picture;
 
 public class QuadTree {
     
+    private Node root;
+    private double tol;
+
     // Axis-aligned rectangle helper class to store each node's subregion represented as
     // a (x_min, y_min) (x_max, y_max) pair
     private class Rectangle {
@@ -28,9 +31,18 @@ public class QuadTree {
         }
     }
 
-    private Node root;
-
     public QuadTree(Picture pic, double tol) { 
-        root = construct(root, pic, tol);
+       root = build(root, 0, 0, pic.width(), pic.height());
+    }
+
+    private Node build(Node h, int xmin, int ymin, int xmax, int ymax) {
+        
+
+
+        return  h;
+    }
+
+    Color computeAverageColor(Picture pic, Rectangle rec) {
+        return null;
     }
 }
