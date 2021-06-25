@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.util.Queue;
+import java.util.LinkedList;
 import edu.princeton.cs.algs4.Picture;
 
 public class QuadTree {
@@ -9,16 +11,18 @@ public class QuadTree {
     private class Node {
         private Color avg;           // the average color of this subregion
         private int ravg, gavg, bavg;
+        private int level;
         private double var;          // the variance between the colors in this region (a.k.a error)
         private int x, y;            // the upper left coor of this nodes rectangle  
         private int width, height;   // the width and height of this rectangle
         private Node nw, ne, sw, se; // pointers to childrens. Ini at null
-        
-        public Node(int x, int y, int width, int height) {
+
+        public Node(int x, int y, int width, int height, int level) {
             this.x      = x;
             this.y      = y;
             this.width  = width;
             this.height = height;
+            this.level  = level;
         }
 
         public void computeAverageColor(Picture pic) {
@@ -63,7 +67,7 @@ public class QuadTree {
             }
             long area = this.width*this.height;
             this.var = (rsqrd - (r*r)/area) + (gsqrd - (g*g)/area) +    (bsqrd - (b*b)/area);
-            System.out.println(Math.sqrt(this.var));
+            //System.out.println(Math.sqrt(this.var));
         }
 
         public boolean isLeaf() {
@@ -77,15 +81,14 @@ public class QuadTree {
     }
 
     private Node build(Picture pic, Node h, int x, int y, int width, int height, int depth) {
-        h = new Node(x, y, width, height);
+        h = new Node(x, y, width, height,depth);
         h.computeAverageColor(pic);
         h.computeVarianceColor(pic);
-        //StdOut.println(h.var);
         int newWidth  = width / 2;
         int newHeight = height / 2;
         int widthOffset = (width + 1) / 2;
         int heightOffset = (height + 1) / 2;
-        if (h.var > tol && (width > 1 && height > 1)) { 
+        if (h.var > tol && (width > 1 && height > 1) && depth < 10) { 
             h.nw = build(pic, h.nw, x, y, newWidth, newHeight, depth + 1);
             h.ne = build(pic, h.ne, x + newWidth, y, widthOffset, newHeight, depth + 1);
             h.sw = build(pic, h.sw, x, y + newHeight, newWidth, heightOffset, depth + 1);
@@ -96,12 +99,34 @@ public class QuadTree {
 
     public void draw() {
         Picture newPic = new Picture(root.width, root.height);
-        draw(root, newPic);
+        drawRecursive(root, newPic);
         newPic.show();
         newPic.save("../img/out/out.png");
     }
 
-    private void draw(Node h, Picture pic) {
+    public void drawFrames() {
+        Picture newPic = new Picture(root.width, root.height);
+        Queue<Node>  q = new LinkedList<>();
+        int curlev  = -1;
+        q.add(root);        
+        while (!q.isEmpty()) {
+            Node cur = q.remove();
+            if (curlev != cur.level) {
+                System.out.println(Math.sqrt(cur.level));
+                newPic.save("../img/out/frameno"+cur.level+".png");
+                curlev = cur.level;
+            }
+            draw(cur, newPic);
+            if (!cur.isLeaf()) {
+                q.add(cur.nw);
+                q.add(cur.ne);
+                q.add(cur.sw);
+                q.add(cur.se);
+            }
+        }
+    }
+
+    private void drawRecursive(Node h, Picture pic) {
         if (h.isLeaf()) {
             for (int i = h.x; i < h.width + h.x; i++) {
                 for (int j = h.y; j < h.height + h.y; j++) {
@@ -109,17 +134,24 @@ public class QuadTree {
                 }
             }
         } else {
-            draw(h.nw, pic);
-            draw(h.ne, pic);
-            draw(h.se, pic);
-            draw(h.sw, pic);
+            drawRecursive(h.nw, pic);
+            drawRecursive(h.ne, pic);
+            drawRecursive(h.se, pic);
+            drawRecursive(h.sw, pic);
         }
     }
-
+    private void draw(Node h, Picture pic) {
+        for (int i = h.x; i < h.width + h.x; i++) {
+            for (int j = h.y; j < h.height + h.y; j++) {
+                pic.set(i, j, h.avg);
+            }
+        }
+    }
     public static void main(String[] args) {
         Picture pic = new Picture(args[0]);
         double tol = Double.parseDouble(args[1]);
         QuadTree qt = new QuadTree(pic, tol);
         qt.draw();
+        qt.drawFrames();
     }
 }
