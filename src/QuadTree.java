@@ -1,6 +1,5 @@
 import java.awt.Color;
 import edu.princeton.cs.algs4.Picture;
-import edu.princeton.cs.algs4.StdOut;
 
 public class QuadTree {
     
@@ -9,6 +8,7 @@ public class QuadTree {
    
     private class Node {
         private Color avg;           // the average color of this subregion
+        private int ravg, gavg, bavg;
         private double var;          // the variance between the colors in this region (a.k.a error)
         private int x, y;            // the upper left coor of this nodes rectangle  
         private int width, height;   // the width and height of this rectangle
@@ -29,30 +29,41 @@ public class QuadTree {
             for (int i = this.x; i < this.width + this.x; i++) {
                 for (int j = this.y; j < this.height + this.y; j++) {
                     Color c = pic.get(i, j);
-                    r += c.getRed();
-                    g += c.getGreen();
-                    b += c.getBlue();
+                    r += c.getRed()*c.getRed();
+                    g += c.getGreen()*c.getGreen();
+                    b += c.getBlue()*c.getBlue();
                 }
             }
             long area = this.width*this.height;
             // Since the values will be between [0,255] we won't lose data
-            int rv = (int)(r/area);
-            int gv = (int)(g/area);
-            int bv = (int)(b/area);
-            this.avg = new Color(rv,gv,bv);
+            this.ravg = (int)Math.sqrt(r/area);
+            this.gavg = (int)Math.sqrt(g/area);
+            this.bavg = (int)Math.sqrt(b/area);
+            this.avg = new Color(ravg,gavg,bavg);
         }
 
         public void computeVarianceColor(Picture pic) {
-            long sum = 0;
+            double r     = 0;
+            double g     = 0;
+            double b     = 0;
+            double rsqrd = 0;
+            double gsqrd = 0;
+            double bsqrd = 0;
+
             for (int i = this.x; i < this.width + this.x; i++) {
                 for (int j = this.y; j < this.height+ this.y; j++) {
                     Color c = pic.get(i, j);
-                    sum += Math.abs(this.avg.getRed() - c.getRed());
-                    sum += Math.abs(this.avg.getGreen() - c.getGreen());
-                    sum += Math.abs(this.avg.getBlue() - c.getBlue());
+                    r += c.getRed();
+                    g += c.getGreen();
+                    b += c.getBlue();
+                    rsqrd += (c.getRed()*c.getRed());
+                    gsqrd += (c.getGreen()*c.getGreen());
+                    bsqrd += (c.getBlue()*c.getBlue());
                 }
             }
-            var = (double) sum / (3*width*height);
+            long area = this.width*this.height;
+            this.var = (rsqrd - (r*r)/area) + (gsqrd - (g*g)/area) +    (bsqrd - (b*b)/area);
+            System.out.println(Math.sqrt(this.var));
         }
 
         public boolean isLeaf() {
@@ -74,7 +85,7 @@ public class QuadTree {
         int newHeight = height / 2;
         int widthOffset = (width + 1) / 2;
         int heightOffset = (height + 1) / 2;
-        if (h.var > tol && (width > 1 && height > 1) && depth < 10) { 
+        if (h.var > tol && (width > 1 && height > 1)) { 
             h.nw = build(pic, h.nw, x, y, newWidth, newHeight, depth + 1);
             h.ne = build(pic, h.ne, x + newWidth, y, widthOffset, newHeight, depth + 1);
             h.sw = build(pic, h.sw, x, y + newHeight, newWidth, heightOffset, depth + 1);
