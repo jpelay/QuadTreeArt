@@ -10,6 +10,9 @@ The original image:
 The result
 ![Quadtree](https://i.imgur.com/fa5TNNl.png)
 
+The internal representation of the image looks as follows:
+![Tree1](https://i.imgur.com/gJ3HuRe.png)
+![Tree1](https://i.imgur.com/86cxLkh.png)
 ### Some other examples:
 
 ![BlueLady](https://i.imgur.com/jtvlfMm.png)

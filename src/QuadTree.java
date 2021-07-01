@@ -161,10 +161,10 @@ public class QuadTree {
         // draw every 5 frames
         int frame = 0;
         for (int i = 0; i < iter; i++) {
-            if (i % 5 == 0) {
+            //if (i % 5 == 0) {
                 draw(newPic, "./frames/frameno"+frame+".png");
                 frame++;
-            }
+            //}
             split(pq,pic);
         }
         draw(newPic, "./frames/frameno"+frame+".png");   
