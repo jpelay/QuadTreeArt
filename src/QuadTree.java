@@ -158,15 +158,16 @@ public class QuadTree {
         root = new Node(pic, 0, 0, pic.width(), pic.height(), 0);
         PriorityQueue<Node> pq = new PriorityQueue<Node>();
         pq.add(root);
+        // draw every 5 frames
         int frame = 0;
         for (int i = 0; i < iter; i++) {
             if (i % 5 == 0) {
-                draw(newPic, "../img/out/frameno"+frame+".png");
+                draw(newPic, "./frames/frameno"+frame+".png");
                 frame++;
             }
             split(pq,pic);
         }
-        draw(newPic, "../img/out/frameno"+frame+".png");   
+        draw(newPic, "./frames/frameno"+frame+".png");   
     }
 
     private void draw(Picture newPic, String name) {
@@ -181,7 +182,16 @@ public class QuadTree {
         Picture newPic = new Picture(root.width, root.height);
         drawRecursive(root, newPic);
         newPic.show();
-        newPic.save("../img/out/out.png");
+        newPic.save("out.png");
+    }
+
+    /**
+     * Render the Quadtree
+     */
+    public void draw(String filename) {
+        Picture newPic = new Picture(root.width, root.height);
+        drawRecursive(root, newPic);
+        newPic.save(filename);
     }
 
     /**
@@ -234,8 +244,8 @@ public class QuadTree {
     }
     public static void main(String[] args) {
         Picture pic = new Picture(args[0]);
-        int iter = Integer.parseInt(args[1]);
-        QuadTree qt = new QuadTree(pic, iter);
-        qt.draw();
+        int n = Integer.parseInt(args[1]);
+        QuadTree qt = new QuadTree(pic, n);
+        qt.draw("out.png");
     }
 }

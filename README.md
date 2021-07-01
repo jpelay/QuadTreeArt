@@ -1,14 +1,18 @@
-## Getting Started
+## Generative Art using Quadtrees
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+This program can generate computer art using Quadtrees. To achieve this the program takes as input one image and the number of iterations the program will run. The average color of each quadrant is computed and the one with the largest error is computed. 
 
-## Folder Structure
+This animation shows the natural process of the algorithm:
 
-The workspace contains two folders by default, where:
+[Imgur](https://i.imgur.com/IPx3Zb1.gifv)
+The original image:
+[Imgur](https://i.imgur.com/tY88g6z.jpg)
+The result
+[Imgur](https://i.imgur.com/fa5TNNl.png)
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+Some other examples:
 
-## Dependency Management
+[Imgur](https://i.imgur.com/jtvlfMm.png)
 
-The `JAVA DEPENDENCIES` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-pack/blob/master/release-notes/v0.9.0.md#work-with-jar-files-directly).
+[Imgur](https://i.imgur.com/oO6TIsJ.png)
+
