@@ -1,6 +1,6 @@
 ## Generative Art using Quadtrees
 
-This program can generate computer art using Quadtrees. To achieve this the program takes as input one image and the number of iterations the program will run. The average color of each quadrant is computed and the one with the largest error is computed. 
+This program can generate computer art using Quadtrees. To achieve this the program takes as input one image and the number of iterations the program will run. The average color of each quadrant is computed and the one with the largest error is splitted. 
 
 This animation shows the natural process of the algorithm:
 
