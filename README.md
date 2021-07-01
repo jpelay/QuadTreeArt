@@ -4,15 +4,18 @@ This program can generate computer art using Quadtrees. To achieve this the prog
 
 This animation shows the natural process of the algorithm:
 
-[Imgur](https://i.imgur.com/IPx3Zb1.gifv)
+![Imgur](https://i.imgur.com/IPx3Zb1.gifv)
 The original image:
-[Imgur](https://i.imgur.com/tY88g6z.jpg)
+![Imgur](https://i.imgur.com/tY88g6z.jpg)
 The result
-[Imgur](https://i.imgur.com/fa5TNNl.png)
+![Imgur](https://i.imgur.com/fa5TNNl.png)
 
 Some other examples:
 
-[Imgur](https://i.imgur.com/jtvlfMm.png)
+![Imgur](https://i.imgur.com/jtvlfMm.png)
 
-[Imgur](https://i.imgur.com/oO6TIsJ.png)
+![Imgur](https://i.imgur.com/oO6TIsJ.png)
+
+Tweaking the program a little bit we can also generate videos.
+
 
